@@ -1,4 +1,4 @@
-import subCategoryModel from "../../../DB/model/subCategory.model.js";
+// import subCategoryModel from "../../../DB/model/subCategory.model.js";
 import { asyncHandler } from "../../utils/asyncHandling.js";
 import Course from "../../../DB/model/course.model.js";
 // import { generateSASUrl } from "../../utils/azureServices.js";
