@@ -99,7 +99,7 @@ export const orderWebhook = asyncHandler(async (request, response) => {
       $push: { coursesBought: order.courses.courseId },
     });
     // clear cart
-    await cartModel.updateOne({ user: req.user.id }, { course: [] });
+    await cartModel.updateOne({ user: request.user.id }, { course: [] });
     return;
   }
   // Return a 200 response to acknowledge receipt of the event
