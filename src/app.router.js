@@ -11,15 +11,12 @@ const appRouter = (app, express) => {
   // Cors // ////////
   app.use(cors({}));
 
-  // app.use((req, res, next) => {
-  //   if (req.originalUrl.includes("/order/webhook")) {
-  //     console.log("ss");
-  //     return next();
-  //   }
-  console.log("PP");
-  express.json();
-  // (req, res, next);
-  // });
+  app.use((req, res, next) => {
+    if (req.originalUrl.includes("/order/webhook")) {
+      return next();
+    }
+    express.json()(req, res, next);
+  });
 
   app.use("/auth", authRouter);
   app.use("/user", userRouter);
