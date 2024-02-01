@@ -79,11 +79,10 @@ export const orderWebhook = asyncHandler(async (request, response) => {
       process.env.ENDPOINT_SECERT
     );
   } catch (err) {
-    console.log(request.body, request.headers["stripe-signature"]);
     response
       .status(400)
       .send(
-        `Webhook Errors: ${err.message},sig: ${sig},req.body: ${request.body}`
+        `Webhook Errors: ${err.message},sec: ${process.env.ENDPOINT_SECERT}`
       );
     return;
   }
