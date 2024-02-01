@@ -5,6 +5,7 @@ import isAuth from "../../middleware/authntication.middleware.js";
 // import * as validators from "./order.validation.js";
 import * as orderController from "./order.controller.js";
 import express from "express";
+import Stripe from "stripe";
 
 //create order
 router.post("/", isAuth, orderController.createOrder);
@@ -16,7 +17,7 @@ router.post("/", isAuth, orderController.createOrder);
 //   orderController.orderWebhook
 // );
 
-const stripe = require("stripe")("sk_test_...");
+const stripe = new Stripe(process.env.STRIPE_KEY);
 const app = express();
 
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
