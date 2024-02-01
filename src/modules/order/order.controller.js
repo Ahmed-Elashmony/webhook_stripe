@@ -69,20 +69,35 @@ export const createOrder = asyncHandler(async (req, res, next) => {
 
 //webhook
 export const orderWebhook = asyncHandler(async (request, response) => {
-  const sig = request.headers["stripe-signature"];
-  let event;
+  ///////////////////////////
   const stripe = new Stripe(process.env.STRIPE_KEY);
-  try {
-    event = stripe.webhooks.constructEvent(
-      JSON.stringify(request.body),
-      sig,
-      process.env.ENDPOINT_SECERT
-    );
-  } catch (err) {
-    console.log(request.body, sig);
-    response.status(400).send(`Webhook Errors: ${err.message}`);
-    return;
+  const stripeSignature = request.headers["stripe-signature"];
+  if (stripeSignature == null) {
+    throw new UnknownError("No stripe signature found!");
   }
+
+  const stripePayload = request.rawBody || request.body;
+  const event = stripe.webhooks.constructEvent(
+    stripePayload,
+    stripeSignature?.toString(),
+    process.env.ENDPOINT_SECERT
+  );
+
+  // /////////////////////////////////////
+  // const sig = request.headers["stripe-signature"];
+  // let event;
+  // const stripe = new Stripe(process.env.STRIPE_KEY);
+  // try {
+  //   event = stripe.webhooks.constructEvent(
+  //     JSON.stringify(request.body),
+  //     sig,
+  //     process.env.ENDPOINT_SECERT
+  //   );
+  // } catch (err) {
+  //   console.log(request.body, sig);
+  //   response.status(400).send(`Webhook Errors: ${err.message}`);
+  //   return;
+  // }
 
   // Handle the event
   if (event.type === "checkout.session.completed") {
