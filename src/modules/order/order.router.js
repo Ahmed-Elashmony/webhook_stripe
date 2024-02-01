@@ -18,13 +18,12 @@ router.post("/", isAuth, orderController.createOrder);
 // );
 
 const stripe = new Stripe(process.env.STRIPE_KEY);
-const app = express();
 
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
 const endpointSecret =
   "whsec_c5b60d7c9ef16b98396202380a20429943cfd363de56840fea0e635a8070e7b3";
 
-app.post(
+router.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   (request, response) => {
