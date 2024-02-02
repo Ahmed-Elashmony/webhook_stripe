@@ -96,12 +96,13 @@ export const orderWebhook = asyncHandler(async (request, response) => {
       cBought.push(order.courses[i].courseId);
     }
     // add course to user
-    await userModel.findByIdAndUpdate(order.user, { coursesBought: cBought });
+    const user = await userModel.findByIdAndUpdate(order.user, {
+      coursesBought: cBought,
+    });
+    let cc = user.coursesBought;
     // clear cart
     await cartModel.updateOne({ user: order.user }, { course: [] });
-    return response
-      .status(200)
-      .json({ message: "Done", cBought, coursesBought });
+    return response.status(200).json({ message: "Done", cBought, cc });
   }
   // Return a 200 response to acknowledge receipt of the event
   return response.status(400).json({ message: "failed" });
