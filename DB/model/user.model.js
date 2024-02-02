@@ -49,6 +49,7 @@ const userSchmea = new Schema(
     },
     coursesBought: [
       {
+        _id: false,
         courseId: { type: Types.ObjectId, ref: "Course" },
       },
     ],

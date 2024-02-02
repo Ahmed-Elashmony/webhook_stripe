@@ -99,7 +99,9 @@ export const orderWebhook = asyncHandler(async (request, response) => {
     await userModel.findByIdAndUpdate(order.user, { coursesBought: cBought });
     // clear cart
     await cartModel.updateOne({ user: order.user }, { course: [] });
-    return response.status(200).json({ message: "Done", cBought });
+    return response
+      .status(200)
+      .json({ message: "Done", cBought, coursesBought });
   }
   // Return a 200 response to acknowledge receipt of the event
   return response.status(400).json({ message: "failed" });
