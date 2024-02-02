@@ -47,12 +47,9 @@ const userSchmea = new Schema(
           "Default/user/default-avatar-profile-icon-social-media-user-vector-default-avatar-profile-icon-social-media-user-vector-portrait-176194876_tojg0u",
       },
     },
-    coursesBought: [
-      {
-        _id: false,
-        courseId: { type: Types.ObjectId, ref: "Course" },
-      },
-    ],
+    coursesBought: {
+      type: [{ type: Types.ObjectId, ref: "Course" }],
+    },
     wishlist: {
       type: [{ type: Types.ObjectId, ref: "Course" }],
     },
