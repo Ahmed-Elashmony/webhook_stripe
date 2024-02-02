@@ -79,11 +79,8 @@ export const orderWebhook = asyncHandler(async (request, response) => {
       process.env.ENDPOINT_SECERT
     );
   } catch (err) {
-    response
-      .status(400)
-      .send(
-        `Webhook Errors: ${err.message},sec: ${process.env.ENDPOINT_SECERT}`
-      );
+    console.log(request.body, sig);
+    response.status(400).send(`Webhook Errors: ${err.message}`);
     return;
   }
 
@@ -94,14 +91,16 @@ export const orderWebhook = asyncHandler(async (request, response) => {
     const order = await orderModel.findByIdAndUpdate(orderId, {
       status: "Completed",
     });
+    let cBought = [];
+    for (let i = 0; i < order.courses.length; i++) {
+      cBought.push(order.courses[i].courseId);
+    }
     // add course to user
-    await userModel.findByIdAndUpdate(order.user, {
-      $push: { coursesBought: order.courses.courseId },
-    });
+    await userModel.findByIdAndUpdate(order.user, { coursesBought: cBought });
     // clear cart
     await cartModel.updateOne({ user: order.user }, { course: [] });
-    return;
+    return response.status(200).json({ message: "Done", cBought });
   }
   // Return a 200 response to acknowledge receipt of the event
-  return response.status(200).json({ message: "Done" });
+  return response.status(400).json({ message: "failed" });
 });
